@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+REALM_PATH="$(readlink -f "${SCRIPT_DIR}/../src")"
+export PYTHONPATH="${REALM_PATH}"
+exec python3 -m main "${SCRIPT_DIR}" "$@"
+
