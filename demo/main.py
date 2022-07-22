@@ -128,7 +128,6 @@ class RealmDemoShell(cmd.Cmd):
         elif arg == "config":
             print(self.active_realm.config.info())
         elif arg == "schema":
-            print("Schema information:")
             class_keys = self.active_realm.get_class_keys()
             if not class_keys:
                 print("No classes found")
@@ -154,8 +153,12 @@ class RealmDemoShell(cmd.Cmd):
     @classmethod
     def property_type(cls, prop: RealmPropertyInfo):
         type_stg = cls.txt_property_type(prop.type)
-        if prop.type == RealmPropertyType.RLM_PROPERTY_TYPE_LINKING_OBJECTS:
-            type_stg += f"({prop.link_target}:{prop.link_origin_property_name}"
+        if prop.type in [
+            RealmPropertyType.RLM_PROPERTY_TYPE_LINKING_OBJECTS,
+            RealmPropertyType.RLM_PROPERTY_TYPE_OBJECT
+        ]:
+            type_stg += f"({prop.link_target.decode('ASCII') if prop.link_target else ''}"
+            type_stg += f":{prop.link_origin_property_name.decode('ASCII') if prop.link_origin_property_name else ''})"
         flags = RealmPropertyFlags(prop.flags)
         if flags & RealmPropertyFlags.RLM_PROPERTY_NULLABLE:
             type_stg += "?"
@@ -198,7 +201,7 @@ class RealmDemoShell(cmd.Cmd):
         else:
             raise ValueError(f"Property type '{rtype}' is invalid")
 
-    def do_exit(self, arg):
+    def do_exit(self, _):
         'Close the realm and exit'
         print('Exiting...')
         close_realms()
