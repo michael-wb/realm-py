@@ -355,31 +355,31 @@ class PropertyWrapper(ABC):
 class Nullable(PropertyWrapper):
     def __init__(self, prop: Union[PropertyType, 'PropertyWrapper']):
         super().__init__(prop)
-        self._property.flags |= RealmPropertyFlags.RLM_PROPERTY_NULLABLE
+        self._property._flags |= RealmPropertyFlags.RLM_PROPERTY_NULLABLE
 
 
 class PrimaryKey(PropertyWrapper):
     def __init__(self, prop: Union[PropertyType, 'PropertyWrapper']):
         super().__init__(prop)
-        self._property.flags |= RealmPropertyFlags.RLM_PROPERTY_PRIMARY_KEY
+        self._property._flags |= RealmPropertyFlags.RLM_PROPERTY_PRIMARY_KEY
 
 
 class RealmSet(PropertyWrapper):
     def __init__(self, prop: Union[PropertyType, 'PropertyWrapper']):
         super().__init__(prop)
-        if self._collection_type != RealmCollectionType.RLM_COLLECTION_TYPE_NONE:
+        if self._property._collection_type != RealmCollectionType.RLM_COLLECTION_TYPE_NONE:
             raise ValueError("Property collection types cannot be combined")
         else:
-            self._collection_type = RealmCollectionType.RLM_COLLECTION_TYPE_SET
+            self._property._collection_type = RealmCollectionType.RLM_COLLECTION_TYPE_SET
 
 
 class RealmList(PropertyWrapper):
     def __init__(self, prop: Union[PropertyType, 'PropertyWrapper']):
         super().__init__(prop)
-        if self._collection_type != RealmCollectionType.RLM_COLLECTION_TYPE_NONE:
+        if self._property._collection_type != RealmCollectionType.RLM_COLLECTION_TYPE_NONE:
             raise ValueError("Property collection types cannot be combined")
         else:
-            self._collection_type = RealmCollectionType.RLM_COLLECTION_TYPE_LIST
+            self._property._collection_type = RealmCollectionType.RLM_COLLECTION_TYPE_LIST
 
 
 class RealmDictionary(PropertyWrapper):
